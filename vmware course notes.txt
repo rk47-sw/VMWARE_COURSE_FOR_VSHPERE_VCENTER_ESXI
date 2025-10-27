@@ -1,0 +1,841 @@
+syllabus -->
+	Complete VMWare vSphere ESXi and vCenter Administration Course Syllabus Module 1 • Introduction • Course Syllabus • Download Syllabus option Module 2 • What is Virtualization? • How Virtualization Works? • Basic Virtualization Terms • Benefits of Virtualization • Virtualization Technology Companies • Difference Between Virtualization and Cloud • Quiz, handouts and homework Module 3 • What is VMWare? • VMWare Products (Player, ESXi, vSphere, etc.) • Importance of VMWare • Quiz, handouts and homework Module 4 • Lab Design • VMWare Online Lab - Virtualization 101 • Download and Install VMWare Player • First VM on VMWare Player (Linux) • Download and Install ESXi Server (Hypervisor) • Configure ESXi Server • Connect to ESXi and Explore vSphere Dashboard • Quiz, handouts and homework Module 5 • First VM on ESXi • Install Linux OS • VM Management • Update ESXi hostname • Install Windows on a VM • Install VMWare Tools • Review VMs and Modify Resources • VM Snapshots • Quiz, handouts and homework Module 6 • Install 2nd ESXi Server • What is vCenter? • Downloading vCenter and Installation Options (Win32 UI or OVA) • Install vCenter • Accessing vCenter (Flash/HTML, SSH, Console, Admin Portal) • vCenter Management Interface • Create a Datacenter and Add ESXi Servers • Managing hosts on vCenter • Quiz, handouts and homework Module 7 • vCenter Homepage • Getting Started and Summary • Monitors • Configure, Permissions and Datacenters (Menu) • Hosts & Clusters and VMs • Other Menu Options • Accessing vCenter through HTML5 • Quiz, handouts and homework Module 8 • Migrating VM without VMWare cluster (Cold) • vMotion • VMWare Cluster • High Availability - (Introduction) • High Availability - Part 1 (Linux Installation) • High Availability - Part 2 (Setup NFS) • High Availability - Part 3 (Mount NFS and Migrate VMs) • High Availability - Part 4 (Setup Cluster and Configure HA) • Distributed Resource Scheduler (DRS) • Sequence of Starting and Shutting VMWare vSphere Environment • Datastore clusters • Quiz, handouts and homework Module 9 • VM Cloning • VM Templates • VM Export and Import (OVF) • Organizing VMs • Other Menu VM Options • Fault Tolerance • Quiz, handouts and homework Module 10 • ESXi Command Line (CLI) • VMWare vCenter Converter • VMWare vRealize Operations • VMWare vRealize Automation • VMWare Horizon • VMWare Community and Resources • Bonus
+
+1 what is virtualization?
+
+- bare-metal server - physical server with no os
+- hypervisor - host or virtual server (os that we can install on bare-metal so we can manage resources to our needs and efficiently)
+//host is a sever that hosts vm os on top of it
+//so vm is a client and is hosted on top of server
+
+terms--
+- virtual machine - vm, guest, instance
+- virtualization manager - manages entire virtual suite - vCenter, OVM Manager etc
+- Virtual desktop - VDI
+- P2V - physical to virtual
+- V2V - virtual to virtual
+- VM template - create a template for VM with required settings / apps
+- Snapshot - saving state of a VM 
+- Clone or cloning 
+
+advantages/benefits of virtualization
+1. cost - saves cost by having multiple os on same hw
+2. real state - saves space
+3. electricity - less 
+4. ease of management - manage one server and control a lot of things
+5. redundancy (less downtime) - auto migration to another vm if a vm goes dowm
+6. faster deployment of machines 
+7. resource availability - we can change specs for vm using sw instead of actual hw changes
+8. better testing and performance - as we can have a isolated testing environment and better hw resources for developing sw as to actually carrying the hw
+9. licensing - instead of paying for multiple license we can save by using server plan
+10. and many more
+
+COMPANIES --- and technologies 
+VMWare - VSphere ESXi - vCloud  --approx 80% market
+VMWare player - for home use (non commercial use) free or pay for advanced features
+
+Oracle - OVM or OLVM - OCI
+Oracle VirtualBox
+
+Microsoft - Hyper-V Azure
+
+Citrix Xen Server - Citrix cloud services
+
+Redhat - KVM - Redhat Cloud Suite
+
+Amazon -     - AWS
+
+Google -     - Google cloud platform
+
+Diff bet Virtualization and Cloud - 
+Virtualization is a technology and cloud is a remote loco which utilities virtualization technology
+
+----------------
+VMWare
+------
+vmware player - runs over an os (labs/home)
+vmware hypervisor - ESXi - bare metal hypervisor runs over a hw without any os?(type 1)
+
+products we need to know of vmware - 
+- vmware workstation player - ideal for running vms on any platform in os (free for non c use)
+- vmware vSphere hypervisor (ESXi) - hypervisor on bare metal
+- vmware vSphere Client - interface to connect to hypervisor, it is a client like RDP for windows and putty for linux servers, (also has web-based client).
+- vmware vcenter - management tool to manage multiple hypervisors
+
+Importance of vmware
+-------------------------
+sys admin, net/storage admin, automation/testing, database/appln admin, cloud, QA, sys/netw architect, security 
+
+suggested vmware setup hw
+8gb ram and 80gb loco storage
+then 24gb ram and 500gb loco storage 
+
+or vmware labs -
+http://labs.hol.vmware.com --> virtualization 101 
+
+//to register for new broadcom account for lab access
+https://knowledge.broadcom.com/external/article?articleNumber=390187
+
+//product manual 
+https://www.vmware.com/docs/vmware-product-guide-april-2024
+
+//1st lab
+https://labs.hol.vmware.com/HOL/catalog/lab/13928
+- will need this later
+---------------
+Installation of esxi on server
+
+- so we installed the esxi server on the vmware workstation app using the free iso hpe image from the downloads option (vmware) from my broadcom dashboard
+- following the promts and steps installed on my machine using the required mem and storage options, then the server rebooted and finished installation
+- we also set a pwd at time of installation
+
+now when we are in - (console) we see- 
+- version + build no. our device specs (processor and ram mem)
+- and in yellow side we see network details for us to be able to connect to this - (DHCP) ipv4 addr and ipv6 addr(this one is static)
+- 2 cmds we can press - F2 (needs pwd) for customize system/view logs, F12 - for shut down/restart 
+
+F2 menu for system configuration
+1 configure pwd - (change root pwd)
+2 configure lockdown mode
+3 config mgmt network
+4 restart mgmt net
+5 test mgmt net
+6 config keeb
+7 troubleshooting options
+8 view sys logs
+9 view support info
+10 reset sys config
+
+in configure mgmt nw - we have
+1 net adapters - see how many
+2 vlan(optional) - not set by default
+3 ipv4 config - we want to make this static
+4 ipv6 config
+5 dns config
+6 custom dns suffixes
+
+- in ipv4 config - we select - set static ipv4 addr and net config --> mostly this is given by IT team - (pick one that is available (not pingable from cmd )) rest default else said by it team
+- esc and save changes - net will reset
+- restart mgmt net - to restart for changes to take effect  
+- test mgmt net - pings your gateway and tests for net
+
+--------------------------
+now we connect to esxi server using vsphere dashboard (using web client)
+---------------------------------------------
+(older versions needed a thick client)
+
+-- just go to the ip of the server shown on any web browser and login using username(root) and pwd
+--> we then see the dashboard of exsi server (vsphere web client)
+
+- 1st thing we see is - Host (EXSi Server) the hypervisor os on the server
+- also we see that it is in evaluation mode and will expire in 60 days
+
+some metrics visible are 
+- version no., state of machine (normal)(not connected to any vcenter server), uptime in days
+- cpu, mem, storage and how much is utilized and how much is free
+- when we create 2nd esxi server we will need vcenter server, also we can see options to create/register vms, shutdown, reboot, refresh, and other actions
+- below we can see some detailed metrics - hardware , configuration, system info , performance summary etc
+//lots of times we find repeated info in multiple places of the ui  - made pulling info from different pages very easy and accessible
+
+vsphere HA - means High Availability 
+- needs at least 2 to support this as if one server dies then the other can take over
+
+vmotion - feature that allows us to migrate from one esxi server to another - will be avaliable automatically if we have vsphere enabled
+
+the navbar has your account info and ip --> in dropdown we can see more options to configure things
+
+-----------------
+actions sub tab - 
+1 create/register vm
+2 shutdown, reboot
+3 services -
+ enable secure shell(ssh) enable-->we can access our server using putty / mputty
+ --> we put in our ip, log in using pwd and connect
+ enable console shell
+4 enter maintenance mode
+5 lockdown mode
+6 permissions
+7 generate support bundle
+
+so we have 3 different methods we can interact with our server - 
+1 console of server
+2 vsphere web client
+3 ssh using putty (need to enable ssh 1st using actions)
+
+all 3 have different things/functionality we can use/perform
+
+maintenance mode is used for support teams to perform any operation like upgrading / troubleshooting etc
+--> once we put on maintenance mode all vms running on that host will be migrated to a different host using HAvMotion technology ]
+
+lockdown is to lock the machine to any changes 
+
+support bundle is useful to generate logs to provide for review and troubleshooting
+
+------------------
+now the manage tab on the left panel 
+----------------------------------------
+
+again we see system info
+we see hardware 
+licensing
+services running in this exsi server
+security and users - to add/manage users
+monitor tab
+-------------
+visualization time graphs for different metrics
+like performace, hardware changes, events logs, tasks, logs, notifications
+--> everything is logged so no non-policy action should be taken on this machine (careful)
+
+below on left we see - virtual machines
+-------------------------------------------
+storage and networking
+in networking we can see 2 virtual network switches 
+- vm network - this network is for virtual machines
+- management network - this is the one we assigned the ip to (made static) we can edit/manage it here
+this was the overview of the web client ui
+----------------------------
+---------------------
+Creating a vm in exsi
+------------------------
+virtual machine --> create/register vm
+pop up for config-- 
+1 select creation type -
+ create new, deploy using ovf(open virtual format) or ova(open virtual appliance) file (pre packaged vms given by vendors etc) --> here config is done, register existing vm (if we have unregistered vm in our inventory)
+ (create new)
+name - (vm name not the os name) eg Linux1VM
+compatibility - choose ver of exsi
+guest os family - linux, etc
+guest os version - cent os 7, etc 
+
+next we select storage - from datastore 
+then virtual hw settings we can config like cpu, mem, hd capacity, hw ports and peripherals like usb controller - using virtual, network adapter, etc
+cd/dvd - we need to attach the iso file here - and select host device (tell that we are going to read iso image from this host device) - 
+2nd way is to datastore iso file - we can upload the iso file to global datastore and access it from there(mostly used) 
+we can also select connect at power on - when we connect to vm then auto iso image is attached
+then, video card - default is left here
+ next we can review the settings we selected and finally create the vm
+
+created vm on vcenter now
+
+------------------------------------
+install os on vmware vm
+------------------------
+when we select our sys - we can see all info we selected etc
+- we can power on it using multiple ways - click on power on, action power on, click on play icon, right click power on
+- we can use console opening in multiple ways - open here, new tab/window or via thick client VMRC - that we need to have installed
+now we go to console and go through the installation process of the os as any other linux installation
+config network if needed/disabled --> change hostname of network etc
+set root pwd and login
+
+----------------------------------
+vm management
+------------------
+regular users may not have access to changing the resources of vms, admins can change the available settings 
+
+1 update hostname from localhost.localdomain to esxi1
+|> we need the console for this, we cant do that using the client
+f2 --> config mgmt net --> dns config --> choose use following dns server addr and hostname (press space) instead of default automatically
+--> change hostname to esxi1 save and exit and apply by restarting network 
+
+--> in corporate setting we will need to set the hostname to be fully qualified using corporate naming
+
+----------------
+install windows on new vm
+----------------------------
+same process -> load iso to console and then choose host -> then open vm and install with necessary actions
+
+-------------
+install vmware tools on a vm
+--------------------------------
+vmware tools are part of exsi server that needs to be installed in a vm in order to pull the accurate information of the vm -> like os, patch info (what patches it has), correct drivers 
+--> we will install vmware tools from exsi server running to vm so that exsi server can report info and pull data from vm
+click actions -> guest os-> install vmware tools
+now disk mounted to windows-> finish the wizard by running exe
+
+-------------------------------------------
+review vms and modify resources
+--------------------------------
+using actions->edit setting
+or at console level..
+we cant make changes to the vm unless we shut it down
+- now we make changes to disk but is not reflected in windows vm --> we have to extend the disk in windows -> disk management -> can see unallocated disk -> new sample volume -> then follow wizard (extend or create new disk)
+
+- in linux similarly -> fdisk -l (cmd to see disk space)
+now we added a new virtual disk - will show up immediately (no need to shut down here)
+
+-----------------
+vm snapshots
+-------------
+preserves state and data of a vm at specific point in time
+- (state includes - power state like powered on, powered off, suspended)
+- data includes all files that make up vm, disks mem, other devices, like virtual network cards etc
+snapshot != backup -> why ? 
+
+how to create? -> go to client browser and right click on vm and press take snapshot -> the option for snapshot the vm's mem means it will save the exact state of the vm 
+(other option if we not take mem snap) -> quiesce guest file sys (needs vmware tools installed) -> this is more like a backup technique so that if anything is pending writing to disk then it will 1st finish writing to it. in order to not have any unstable state (it will take lot longer - depending on the writing of all processes to disk)
+-> now we can restore to latest snapshot if something goes wrong or anything breaks
+
+impact of taking too many snapshots --> will make vm slower and slower 
+there is a option - consolidate disks - it will take all the snapshots put it together and bring you to the state right now (apply all changes you had before)
+
+-------------------
+installing 2nd esxi server
+---------------------------
+why need 2nd - if one fails/dies then we need the 2nd to redirect the load to as a downtime preventive measure.
+
+now what we will do is -->
+pc -> vmware player -> vsphere esxi1 vm -> 2vm (linux + windows) 
+we add another vm vsphere esxi2 -> vcenter vm 
+
+this will enable us to manage the HA(high availability) clustering 
+
+vcenter needs high resources - min 2cpu 12gig ram and 300gb loco mem storage
+
+----------
+vcenter 
+-----------
+what is vcenter?
+vcenter server is the centralized management utility for vmware and is used to manage vms, multiple esxi hosts and all dependent components from a single centralized loco
+
+- HA- high availability (migrate 1 to another)
+- DRS- distributed resource scheduler(moves vms based on distribution of resources and vm needs)
+- vmotion - allows to migrate vm from one host to another while they are live (up and running) 
+- vDS - v distributed switches - allows setting networking of esxi servers all at the same time
+- vSAN - v storage 
+- sso - single sign on - can login to all managed servers from one directory/authentication service
+- update manager- patch system of any products while they are up and running
+- host profiles - can create a template for one and use it to create multiple 
+- vrealize orchestrator - allows to automate things
+- etc
+
+so it can migrate to another vm using HA itself in case of failure/dies
+
+-----------------
+methods of installing vcenter
+------------------------------
+1 using iso- we download from vmware site and mount then open it(vcsa) - find ova(open virtualization format) file
+then we can deploy this using esxi client --> in 2nd esxi vm deploy this using the same file
+
+go though the wizard options --> thin (default as other will need much more resources)
+--> provide directory pwd
+... finish
+
+2 cli installer/conforge cli  -> used for cmd line based approach 
+
+3 ui based -> choose win32 - run installer
+we are going to give ip .7 (as .5 to esxi1,.6 to 2)
+follow wizard keeping things default -> esxi host/vcenter server name - means the vm ip addr (on which we need to install - make sure the server on which we want to install is up and running)
+
+go through the entire wizard and then check by going to the ip addr of that and verify installation by seeing the vsphere page
+
+-----------------------
+accessing vcenter
+-----------------
+1 browser(web-client) - ip addr
+(2 option)-> web cilent flash and html5(partial func.)
+2 console (within web-client)
+login - root
+ and pwd
+3 SSH - phonton linux
+4 vcenter management interface   - using ip + specifically specifying the port :5480
+
+to login using sso - 
+we need to use --> administrator@vsphere.local
++ pwd
+--> allow flash in page setting
+
+what things can be managed using the management interface? ==
+- current status, update, backup, monitoring, pwd change, appliance logs etc
+
+---------------
+how to add esxi servers to vcenter so they can be managed by vcenter
+----------------------------------------------------
+1 make sure vcenter server is running, esxi server is also running on which vcenter vm is on then login to vcenter
+2 create a datacenter -> then add the esxi1 and 2
+
+once login -> right click to ip and create new datacentre and set name and loco
+
+then we can either in interface select add host or right click and add host
+put ip of that host and username and pwd
+we also add the vcenter server here and now we are both managing the vcenter and the vm server with same vcenter client (nested kinda)
+
+managing hosts on vcenter
+----------------------------
+
+1 we can right click and see all the options we can perform on the managed ip(host on vcenter)
+like - create vm(same way we created in vsphere client) , vapp, new resource pool -> assignment of specified amount of resources (like 2cpu , 4gig ram etc) to certain vm separately
+
+2 maintenance mode - very useful and used by many admins
+3 host profile - we can extract the config as a template we can use/attach to new esxi server and those config will get auto applied
+
+4 export system logs - we can see what is wrong with this
+5 move to - move to free other hosts
+6 tag - to easily recognize host by alias other than ip
+7 permissions - to hide/manage access to certain servers
+8 alarms - if one dies we can set these to work
+
+---------------------------------
+vcenter home page - (management)
+--------------------------------------
+- inventory, operations and policies, administration, plug-ins for installation, etc
+click on home icon in navbar and select home
+
+- content library - is a repo. for vm templates, iso images, scripts etc used by the esxi hosts or creating new vms etc
+- operations and policies - mostly logs and events saved or registered here and other post deployment work
+
+getting started and summary
+-----------------------------
+each ip we select we get a getting started with brief details of what it is and summary -(hw info)
+
+monitor
+--------
+in this we can see all the events that needs our attention and issues, we can see all our alarms and can manage these settings
+we can also see tasks and events tab - that shows us the log of all occurred or triggered events from the server/vm
+system logs and sessions tell us who is logging in and how long is system idle for
+
+configure, permissions and datacenters tabs
+---------------------------------------------
+we can see all the info here, here we spend most time configuring and setting things
+
+other options like vm, etc are also present
+
+------------------
+sharing resources and vcenter clustering
+---------------------------------------------
+
+migrating vms - 
+1 cold migration - vm shut down completely - we can migrate that to new host 
+(do not need vmotion, vmware cluster, HA feature enabled)
+- right click and migrate --> change both compute and storage - we need to power it off 1st then follow the wiZard and finish
+- also we can drag and drop and follow same wizard
+
+vmotion
+----------
+- live migration of running vm from one server to another with no downtime - 
+- transfer the vms active mem and precise execution state over high speed network allowing the vm to switch from running on source vsphere host to destination vsphere host, taking less than 2 sec on gig ethernet network
+- also allows for hw maintenance without downtime 
+- also enables optimization - within resource pools by auto migration to less utilized area for better perf
+//needs resource pool, HA, DRA, etc
+
+we need to setup vmotion network for this to work -
+1st create a new network adapter from networking tab in 1st esxi server and select vmotion in wizard
+- same we will do for 2nd esxi server
+
+now we migrate to new one -
+we see no downtime
+
+-------------------
+vmware cluster
+---------------
+- group of hosts, when a host is added to a cluster the resources of the host become part of the resources of the cluster
+//cluster manages the resources of all hosts
+//Clusters enables - vsphere HA(high availability), DRS (Distributed resource scheduler) and Vmware vSAN features
+= HA and DRS features are main points to having a cluster (if those features are not used then making a cluster is useless)
+
+- Cluster can only be created at the DATACENTER level - that we created on top after the vcenter level ip, we do not see clustering options show up in vm or server level
+
+- drs allows to migrate vms from one host to another based on the resources eg a high traffic esxi host using a lot of resources can be moved to a host using less resources to optimize 
+
+- ha - will move the vm from one host to another if host 1 dies or goes into maintenance.
+
+- evc - (enhanced vmotion compatibility) - if 2 clusters need to be managed together and they have different cpus(1 has intel and 2 has amd eg) then they cant be managed unless evc is enabled
+- we once created the cluster, drap and drop our hosts to be in that cluster
+
+//the cluster shows the combined resources of all the hosts 
+//without having drs or vmotion feature the cluster is just a container, so any vm we create in it will need host to be selected manually as it cant auto select best host loco itself 
+
+HA(HIGH AVAILABILITY)
+-----------------------
+- HA - it migrates the vms automatically live in case of if we put a host in maintenance mode but in case of host failure or if it dies then it will migrate those vms to another and restart that service or vm
+//it reduces downtime 
+- when we add a new host to cluster a agent is uploaded to the host that communicates with other agents in the cluster 
+- every cluster has one master host and all other hosts are subordinate hosts, master is auto determined through an election process and master gets the responsibility of detecting and appropriately resolving failures in the cluster
+
+ha cluster requirements -
+------------------------
+- //all esx/esxi hosts must be same version and same patch level.
+- //all hosts must be licensed for vsphere ha
+- //min of 2 esxi servers in a cluster
+- //each host must have a vmotion nic configured
+- //there much be min 2 shared ha heartbeat datastores attached to each host (NFS or NAS)
+- //all vms must be on shared storage 
+- //all hosts must have access to a shared datastore (NFS or NAS)
+- //vmware HA must be enabled on the cluster
+
+//method in lab to setup ha -
+create vm on vmware player -> install centos for nfs storage (detected by sw) -> add 2 new hard disks -> create partition -> setup share nfs -> mount nfs on vcenter -> move vm storage from local to shared -> setup and configure ha
+
+(nfs servers can also be setup through a dedicated nas device) -> we can use this as shared storage in our setup and mount linux on it
+
+after we install we ping all 3 to see if all is running
+
+next we install nfs and its utils and enable its service in cmd
+	yum install nfs-utils libnfsidmap -y
+	`#enable it`
+	systemctl enable rpcbind
+	systemctl enable nfs-server
+	systemctl start rpcbind
+	systemctl start rpc-statd
+	systemctl start nfs-idmapd
+
+then add 2 disks from workstation player - 100gb(any vm built on server) and 5gb(shared ha for its heartbeat)
+reboot - to discover these disks
+check using --> fdisk -l
+
+then create xfs partitions on linux and same for sdc1
+	fdisk /dev/sdb
+	n->p->enter->enter->w
+	mkfs . xfs /dev/sdb1
+
+then create nfs mount points and mount
+	mkdir /shared
+	mkdir /qoram
+	mount /dev/sdb1 /shared
+	mount /dev/sdc1 qoram
+and check if mounted --> df -g
+
+cp /etc/fstav /etc/fstab.orig
+vi etc/fstab
+insert here --> below cmds and use tab as space below cmds
+then check using cat
+then add nfs mounts to /etc/fstab for auto-mount
+	/dev/sdb1 /shared xfs defaults 0 0
+	/dev/sdc1 /qoram xfs defaults 0 0
+
+cp /etc/exports /etc/exports.orig  //good practice to make a copy of any file (config) that we are going to make changes to 
+then add the entry to /etc/exports using vi or nano 
+here use space
+	/shared `*`(rw,sync,no_root_squash)
+	/qoram `*`(rw,sync,no_root_squash)
+
+then export the nfs share 
+	exportfs -rv
+
+then stop and disable firewall
+	systemctl stop firewalld
+	systemctl disable firewalld
+
+
+		->dsv-balance-show --showNodeIp
+
+we created same things like following a wizard in the nfs server
+
+now mounting a nfs and migrating vms
+--------------------------------------
+in both the hosts we select new datastore and select nfs then version then datastore name and folder name - fully qualified addr, and ipaddr of that vm
+
+then migrate the datastore of the vm to the shared one of each vm
+(shared vm needs to be on before)
+
+final check before we do further steps -> check both our created datastores are attached to both hosts
+
+create new cluster and move the hosts into it
+now we go to edit config and turn on vsphere drs
+ 
+then turn on ha in vsphere availability 
+also proavtive ha on (allows detection of any hw failures as well)
+
+failure and responses -> enable host monitoring and do restart vms for host response
+
+admission control -> disable as only 2 esxi server if more then left enabled
+
+heartbeat datastore we select the one we created
+
+ok -> wait for finished -> test --> we try to migrate by putting one server in maintenance mode
+
+--------------
+distributed resource scheduler (drs)
+-------------------------------------
+- it is a feature included in vsphere enterprise plus
+- it improves service levels by guaranteeing appropriate resources to vms
+- it provides highly available resources to workloads and balances for optimal performance, also scales and manages computing resources without service disruption
+- it auto migrates vms to optimize resource utilization 
+
+now imp to know the step of --
+sequence of starting and shutting vmware vsphere environment -->
+
+	starting order
+	1 nfs server (linux vm if using that or nas)
+	2 esxi running vcenter
+	3 other esxi that has vms or other things
+	4 vcenter vm (appliance) - take about 5 - 10 min
+
+	shutdown order
+	1 vcenter vm (wait till complete shutdown)
+	2 esxi running vcenter
+	3 other esxi 
+	4 nfs server (linux vm or nas)
+-------------------
+datastore cluster
+--------------------
+a datastore is a collection of datastores with shared resources and a shared management interface. datastore clusters are to datastores what clusters are to esxi hosts. after creating a datastore cluster one can use vsphere storage drs to manage storage resources.
+
+so we can migrate storage resources of a vm with less space to another loco using this 
+
+when vsphere storage drs is enabled on a datastore cluster, then vsphere automates the process of initial vm file placement and balances storage resources across the cluster to avoid bottlenecks.
+vsphere storage drs considers datastore space usage and i/o load when making migration recommendations.
+
+-------------------------------------
+
+VM cloning
+-----------
+a clone is a copy of an existing vm, the existing vm is called the parent of the clone
+when cloning is complete, the clone is a seperate vm
+
+why make a clone?
+installing a guest os and apps is tedious and time consuming. with clones we can make copies of existing configured vms from single installation and config process
+
+1 thing to remember is to always customize when cloning vm so that we can avoid ip conflict with the existing vm (we need to change the host ip to some new free ip) and power on when done
+
+also can create a configuration for the clone so we may use that in future
+
+if we need to clone a vm and want to customize the setting/config while cloning then we need to have vmtools installed and (open-vm-tools, net-tools, perl) (linux machine vm)
+
+------------------------------
+vm templates
+-------------
+- vmware template is a master copy of vm from which an admin can clone, convert or deploy more vms
+- it includes - (guest os, set of applns, specific vm configs)
+- it saves time and avoid errors when configuring settings and other choices to create new windows or linux vms
+- template can't be powered on or edited once created (frozen)
+diff bet template and clone - 
+template acts as a baseline image for a vm with the predefined configs as per your org's standards.
+while - cloning creates an exact duplicate copy of a vm at that exact time
+
+//a vm needs to be in powered off state to make a template out of it (the vm becomes the template)
+//if we need it to be live then we can choose the clone option and use clone to template option (in this case a clone is created and made into template)
+//also we have option of exporting as ovf template -> and where we want a vm we can use this ovf file
+
+//once we create a template we cant see the start vm we see new vm from this template, convert to vm -> 
+	if we need to apply some critical update to template we can convert it back to vm and apply those changes/ configs then convert it back to template
+we can also add the template to library where we store all our templates and isos
+
+---------------------------------
+vm export as ovf
+-------------------
+ovf is a file format that supports exchange of vms across products and platforms. when we export a vm as an ovf file, we create a directory that contains an ovf file and virtual disk file. 
+we may consider ovf as an archive of all files that belong to the ovf directory
+
+why we needs this? -> so we can take our vm and run it also on other hw of other vendors as ovf is universal format
+//we make sure before exporting the vm is powered off
+
+the export includes - (in case of .ovf file)
+.ovf
+.vmdk - vm disk file
+.iso - entire image of vm
+.mf - manifest file
+
+
+the export includes - (in case of .ova(open virtual appliance) file)
+we like make it into a tarball and transport it
+.ova
+.vmdk - vm disk file
+.iso - entire image of vm
+.mf - manifest file
+
+--------------------------------
+organizing vms
+---------------
+- using folders
+- can be remove/register to inventories 
+
+thing to note is once we put a vm in a folder we cannot drag to remove it - it will not allow also if we try to delete it, it will also remove all the inside vms in it, it needs to have all vms in off state to be able to delete the folder
+--> we wont see vms -> it unregistered the vms from our inventory (does not delete the vms)
+
+- we need to register them back -> go to datastore where it is saved -> can see it in the folder as .vmx file-> right click this and register vm
+before we power on vsphere needs to know if you are the one who copied it (answer and power on)
+
+-----------------------
+other menu options for vms
+-------------------------------
+power, guest os, fault tolerence, vm policies, compatibility, edit resource settings, edit settings, move to, rename, edit notes 
+under actions or right click 
+//not recommended to use right click poweroff as it may be same as unplugging power cord rest options same in power
+//shut down guest os -> graceful shut down
+
+//tag allows us to search a lot faster and easily
+//delete from disk will actually delete the vm from both inventory and disk as well
+
+---------------------
+fault tolerence
+---------------
+vmware vsphere fault tolerance (FT) provides continuous availability for applications (with up to 4 virtual cpus) by creating a live shadow instance of a vm that mirrors the primary vm.
+
+if any hw outage occurs, vsphere FT auto triggers failover to eliminate downtime and prevent data loss.
+
+- vmotion helps when a server goes into maintenance so it can migrate it live, HA helps migrate when a vm is powered down, but FT helps big --> 
+- safeguarding any number of vms in a cluster bec it leverages existing vsphere ha clusters
+- admins can micromanage by enabling or disabling vsphere FT for specific vms with the vsphere client, also use it for apps that require continuous protection during critical times etc
+
+FA needs a dedicated NIC to be set up (so as we did for vmotion) 
+2 ways :-
+configure->networking->vmkernal adapters -> 1 create new nic while choosing fa option and following the wizard
+2 use the one already created (not recommend in prod) -> edit and enable fa logging
+
+then we need to go to vm and from options we choose to enable fa -> (choose the shared disk that is common to other esxi host as well and it will use this as shadow)  
+not recommended to use same storage for FA (like same shared storage, it needs separate that should be accessible to other hosts as well)
+- we notice this is dark blue now (meaning that this vm has a shadow running) so if anything goes wrong with this vm or os then it will create a shadow machine and bring it up parallel to it
+
+---------------------------------
+Accessing vmware web client with html5
+-----------------------------------------
+some features will be available as part of transition from flash to html5 over time
+
+-------------
+esxi cli 
+---------
+- we can perform all functions and settings through cli as we would in gui (vsphere client)
+- cli can even perform additional functions that is not available through gui
+- we need -> SSH enabled to access esxi cli
+- (how to enable ssh) -> 1 esxi gui-> host-> actions-> services-> enable ssh
+//2 vcenter gui-> host-> configure->security profile->services->ssh
+//3 esxi console screen -> f2-> troubleshooting options->enable ssh
+
+--> when we get ssh access then we can connect to the server/host/esxi host using putty  
+
+we just need to provide the ip of the host we want to connect to and login then we can see the command line of that host 
+
+esxi cmds are divided into 2 categories
+-----------------------------------------
+1 linux and main esxi specific commands
+2 esxcli -> cmd that operate on the esxcli system itself allowing users to get additional information. the esxcli cmd has additional cmds options with arguments.
+
+--> we can see the list of all the commands on the linux command line on the cli interface of the ssh session by pressing <mark style="background: #D2B3FFA6;">tab twice</mark> , q to come out of this view
+--> a lot of these cmds share with the linux cmds 
+
+exsi specific commands generally start with esx or esxi or (vim-cmd - access all vm related task on cmd)
+to learn more about the type and functionality of arguments we can use on a cli we can type - esxcli
+
+powered off vms are not visible in network unless specified explicitly via some cmd
+
+---------------------
+vmware vcenter converter
+--------------------------
+vmware vcenter converter quickly converts local and remote physical machines into vms (p2v) without any downtime
+
+- converter supports many source physical machines, including windows and linux desktop and server editions. it also supports conversion of 3rd party vms like hyper-v and kvm
+
+- the converter can also be used to perform v2v from 1 virtual environment to another.
+
+------------------------
+vmware vrealize operations
+----------------------------
+- vrealize operation manager delivers intelligent operations management with application-to-storage visibility across physical, virtual and cloud infras. using policy based automation, operations teams automate key processes and improve the it efficiency.
+- using the data collected from sys resources, vrealize operations manager identifies issues in any monitored sys component, often before the customer notices a problem.
+- it also frequently suggests corrective actions to take to fix problems right away. for challenging problems, it offers rich analytical tools that allow reviewing and manipulating object data to reveal hidden issues, investigate complex technical problems, identify trends, or drill down to gauge the health of single object.
+
+main benefits of vmware vrealize operations manager
+----------------------------------------------
+- capacity planning --> how many esxi user may need a year or 2 from now, also useful for datacenter migrations, p2v or v2v
+- resource analysis --> vms with no workload, vms that have been shut down for more than defined data range,identify which virtual network has high or low traffic, vms with older snapshots, vms with sluggish performance
+- automation - vm with over or under-utilized resource migration, 
+- reporting - (needs time to graph out data points so as to build the data to show as metrics or charts) - historical data, eg we can have a knowledge analysis on it to make observations like eg how many times a vm was shut down or rebooted
+- etc, vrealize operation manager is a server/vm sw/application/program that pulls data from a vcenter managed environment 
+
+- vmware hol - lab 873 is for vrealize also search vrealize for others labs too.
+
+vmware vrealize automation (vRA) -
+--------------------------------------
+- vrealize automation is a modern infra automation platform that enables private and multi-cloud environments on vmware cloud infra.
+- it delivers self service automaion, devops for infra, config mgmt and network automation capabilities that helps increase business and IT agility, productivity, and efficiency. integrates, stremlines and modernizes traditional, cloud-native, and multi-cloud infras with vrealize automation and simplifies IT while preparing for the future of any business. 
+- using an automation solution, end users can self-provision vms in private and public cloud environments, physical machines(install OEM images), applications, and IT services according to policies defined by admins.
+//we can use vrealize automation labs in vmware hol - also can use vrealize by dwn appliance as well
+
+vmware horizon
+----------------
+vmware horizon (formerly called horizon view) is a commercial desktop and app virtualization product developed by vmware, inc for windows, linux and mac
+
+- vmware horizon is a modern platform for secure delivery of virtual desktop and apps across the hybrid cloud, from the market leader in software-defined data center and digital workspaces. By leveraging unique integration with trusted vmware technology, horizon helps IT efficiently deploy and scale virtual desktops and apps from a single control plane with rapid provisioning, automation, and simplified mgmt to extend the best digital workspace experience to end users
+VDI - virtual digital infrastructure - which is based on vmware horizon
+
+- a desktop os - typically ms windows runs within a vm on a hypervisor -> this will be used by horizon to run those apps and extend them as virtual available apps to provide the experience
+
+- vmware horizon product has a number of components which are required to provide virtual desktops, including -
+1. vmware vsphere hypervisor (esxi with vsphere lisence)
+2. vmware vcenter server(mgmt of virtualization environment)
+3. view composer(advanced view mgmt, with automation and cloning)
+4. view manager(administration of the view environment)
+5. view client(comm. bet view and desktop os)
+6. vmware thinapp (app virtualization)
+7. view persona mgmt (user profile mgmt)
+8. vshelid endpoint (offloaded desktop antivirus)
+
+	VMware Horizon is a Virtual Desktop Infrastructure (VDI) product that ==allows users to securely access a virtual desktop or application hosted in a data center==. Rather than using a local, physical computer, a user's operating system, applications, and files are streamed to their device from a server. This gives employees the freedom to work from anywhere, on almost any device.
+	
+	The product was part of VMware but, in 2024, was spun off into a new company called Omnissa following an acquisition.
+	
+	How VMware Horizon works
+	
+	At its core, VMware Horizon works by separating the desktop operating system from the hardware it's running on.
+	
+	1. **Centralized host**: An organization runs virtual machines (VMs) on central servers, or hosts, in a data center or cloud environment. Each VM is configured as a desktop environment with a specific operating system and applications.
+	2. **Connection broker**: The Horizon Connection Server acts as a gatekeeper for the system. When a user tries to connect, it authenticates their credentials against a directory service, such as Active Directory. It then "brokers" the connection by directing the user to an available virtual desktop they are authorized to access.
+	3. **End-user access**: To access their virtual desktop, users install the free **Horizon Client** software on their personal device (like a laptop, tablet, or thin client) or use a web browser.
+	4. **Streaming the desktop**: Once the connection is established, the virtual desktop is streamed to the user's screen using display protocols like VMware's own Blast Extreme. The user's keyboard and mouse movements are sent back to the virtual desktop, and the visual output is sent back to the user's device. This makes it feel as if the user is working on a local machine, while all the actual processing happens securely in the data center.
+	5. **Centralized management**: Since the desktops are virtual, they can be easily managed and updated from a central administrative console, saving time and costs for the IT department.
+	
+	Who benefits from VMware Horizon
+	
+	VMware Horizon provides significant benefits for remote and mobile workforces, as well as for industries with high-security requirements.
+	
+	- **For employees:** It offers a consistent and familiar desktop experience across all their devices, from corporate laptops to tablets.
+	- **For IT departments:** It simplifies management, improves data security, and allows for rapid deployment of new desktops.
+	- **For the business:** It helps reduce infrastructure costs by prolonging the life of older hardware, and ensures business continuity by enabling access from anywhere.
+
+------------------------------------
+
+vmware community and resources
+--------------------------------
+vmware documentation is the best resource to follow - docs.vmware.com
+vmware customer support -> etc
+
+
+https://labs.hol.vmware.com/HOL/catalog
+https://www.vmware.com/products/cloud-infrastructure/cloud-foundation-automation
+https://www.omnissa.com/products/horizon-8/
+-------------
+
+virtualization is the process of creating sw based or virtual representation of smt such as virtual applications, servers, storage and networks.
+terms - 
+hypervisor - host/virtual server
+vm- guest os/vm
+virtualization manager - vcenter, ovm manager
+virtual desktop
+p2v - physical to virtual, v2v
+snapshot, clone or cloning
+
+----------------
+RAID - redundant array of independent disks
+types - 0, 1, 5 etc
+- raid0 -> 5 + 5 = 10gb (combining multiple disks to make 1 large disk but is not redundant as if 1 dies then we lost half data)
+- raid1 -> 5 = 5 = 5gb (mirror the entire disk to create a redundant copy)(slow)
+- raid5 -> 5 += 5 += 5 == 12gb (needs to have at least 3 to work)(make selective copies to different disks so that in case of failure the data is recoverable using the other 2)(needs some space for parity for the other disks info)
+ 
+SATA and SAS
+--------------
+SATA-> Serial Advanced Technology Attachment
+SAS-> Serial Attached SCSI(Small Computer System Interface)
+- main difference is sas drives are more reliable and faster than sata drives
+- sas is expensive and better suited for servers sata is less expensive and suited for desktop file system
+- sata cable are placed within the same cable. in sas the 4 wires are separated into 2 different cables
+- in sas we can connect more devices to one another, but sata only allows one connection.
+
+---------------
+Certificate got
+-------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
